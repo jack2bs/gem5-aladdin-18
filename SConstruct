@@ -399,8 +399,8 @@ if main['GCC'] + main['CLANG'] > 1:
 # Set up LLVM version for Aladdin.
 llvm_cmd = readCommand(['clang', '--version'], exception=False)
 llvm_version = ''.join(re.findall(r'\d+', llvm_cmd)[:2])
-if llvm_version != '60' and llvm_version != '34':
-    warning('Warning: we only support LLVM-3.4 and LLVM-6.0!')
+if llvm_version != '60' and llvm_version != '34' and llvm_version != '180':
+    warning('Warning: we only support LLVM-3.4 and LLVM-6.0 and LLVM-18.0!')
 else:
     main.Append(CCFLAGS=['-DLLVM_VERSION=' + llvm_version])
 
@@ -420,6 +420,7 @@ if main['GCC'] or main['CLANG']:
                          '-Wno-unused-local-typedefs',
                          '-Wno-reorder',
                          '-Wno-maybe-uninitialized',
+                         '-Wno-uninitialized',
                          '-Wno-unused-but-set-variable'])
     # We compile using C++14
     main.Append(CXXFLAGS=['-std=c++14'])
@@ -443,6 +444,15 @@ if main['GCC'] or main['CLANG']:
     main.Append(CCFLAGS=['-Werror',
                          '-Wno-error=deprecated-declarations',
                          '-Wno-error=deprecated',
+                         '-Wno-error=deprecated-copy',
+                         '-Wno-error=type-limits',
+                         '-Wno-error=address-of-packed-member',
+                         '-Wno-error=free-nonheap-object',
+                         '-Wno-error=range-loop-construct',
+                         '-Wno-error=vexing-parse',
+                         '-Wno-error=parentheses',
+                         '-Wno-error=misleading-indentation',
+                         '-Wno-error=array-bounds'
                         ])
 else:
     error('\n'.join(
